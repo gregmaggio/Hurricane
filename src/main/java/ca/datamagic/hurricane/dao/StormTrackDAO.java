@@ -107,8 +107,12 @@ public class StormTrackDAO extends BaseDAO {
 			List<StormTrackDTO> tracks = new ArrayList<StormTrackDTO>();
 			String connectionString = getConnectionString();
 			connection = DriverManager.getConnection(connectionString);
-			statement = connection.prepareStatement("SELECT * FROM stormtrack WHERE storm_no = ? ORDER BY track_no");
-			statement.setInt(1, stormNo);
+			if (stormNo > 0) {
+				statement = connection.prepareStatement("SELECT * FROM stormtrack WHERE storm_no = ? ORDER BY track_no");
+				statement.setInt(1, stormNo);
+			} else {
+				statement = connection.prepareStatement("SELECT * FROM stormtrack ORDER BY storm_no, track_no");
+			}
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				StormTrackDTO dto = new StormTrackDTO();
