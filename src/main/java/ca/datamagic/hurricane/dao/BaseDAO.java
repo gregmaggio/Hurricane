@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class BaseDAO {
 	private static Logger _logger = LogManager.getLogger(BaseDAO.class);
-	private static String _dataPath = "C:/Dev/Applications/Hurricane/src/main/resources/META-INF/data";
+	private static String _dataPath = "C:/Dev/Applications/Hurricane/src/main/resources/data";
 	
 	static {
 		try {

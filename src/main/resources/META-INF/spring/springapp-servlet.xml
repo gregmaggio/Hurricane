@@ -24,9 +24,6 @@
      
     <!-- Controllers -->
 	<bean name="indexController" class="ca.datamagic.hurricane.controller.IndexController" />
-	<bean name="stormController" class="ca.datamagic.hurricane.controller.StormController" />
-	<bean name="basinController" class="ca.datamagic.hurricane.controller.BasinController" />
-	<bean id="documentationConfig" class="com.mangofactory.swagger.configuration.SpringSwaggerConfig"/>
 	
     <context:annotation-config />
     
