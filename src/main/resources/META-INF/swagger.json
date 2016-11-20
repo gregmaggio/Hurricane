@@ -1,9 +1,9 @@
 {
 	"swagger" : "2.0",
 	"info" : {
-		"description" : "ENSO API",
+		"description" : "Hurricane API",
 		"version" : "1.0",
-		"title" : "ENSO Service",
+		"title" : "Hurricane Service",
 		"license" : {
 			"name" : "Apache License Version 2.0"
 		}
