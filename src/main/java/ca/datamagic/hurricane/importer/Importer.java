@@ -148,14 +148,11 @@ public class Importer {
 	public static void main(String[] args) {
 		try {
 			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/META-INF/log4j.importer.cfg.xml");
-			//String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/META-INF/data/hurdat2-1851-2015-021716.txt";
-			String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/META-INF/data/hurdat2-nepac-1949-2015-022516.txt";
+			String fileName = "C:/Data/HurricaneTracks/hurdat2-2016-041117.txt";
 			
 			BasinDAO basinDAO = new BasinDAO();
-			//basinDAO.clear();
 			
 			YearDAO yearDAO = new YearDAO();
-			//yearDAO.clear();
 			
 			List<BasinDTO> basins = parse(fileName);
 			for (BasinDTO basin : basins) {
