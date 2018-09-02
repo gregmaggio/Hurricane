@@ -8,7 +8,7 @@
 			"name" : "Apache License Version 2.0"
 		}
 	},
-	"host" : "localhost:8081",
+	"host" : "localhost:8080",
 	"basePath" : "/Hurricane",
 	"tags" : [{
 			"name" : "hurricane-controller",
@@ -67,6 +67,43 @@
 							"type" : "array",
 							"items" : {
 								"type" : "integer"
+							}
+						}
+					},
+					"401" : {
+						"description" : "Unauthorized"
+					},
+					"403" : {
+						"description" : "Forbidden"
+					},
+					"404" : {
+						"description" : "Not Found"
+					}
+				}
+			}
+		},
+		"/api/search/{searchText}" : {
+			"get" : {
+				"tags" : ["hurricane-controller"],
+				"summary" : "search",
+				"operationId" : "search",
+				"consumes" : ["application/json"],
+				"produces" : ["*/*"],
+				"parameters" : [{
+						"name" : "searchText",
+						"in" : "path",
+						"description" : "searchText",
+						"required" : true,
+						"type" : "string"
+					}
+				],
+				"responses" : {
+					"200" : {
+						"description" : "OK",
+						"schema" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/StormKeyDTO"
 							}
 						}
 					},
@@ -269,6 +306,24 @@
 				"zoom" : {
 					"type" : "number",
 					"format" : "integer"
+				}
+			}
+		},
+		"StormKeyDTO" : {
+			"type" : "object",
+			"properties" : {
+				"stormKey" : {
+					"type" : "string",
+				},
+				"basin" : {
+					"type" : "string",					
+				},
+				"year" : {
+					"type" : "number",
+					"format" : "integer"
+				},
+				"stormName" : {
+					"type" : "string"
 				}
 			}
 		},

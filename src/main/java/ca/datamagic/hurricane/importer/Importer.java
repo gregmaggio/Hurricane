@@ -19,6 +19,7 @@ import ca.datamagic.hurricane.dao.BasinDAO;
 import ca.datamagic.hurricane.dao.StormTrackDAO;
 import ca.datamagic.hurricane.dao.YearDAO;
 import ca.datamagic.hurricane.dto.BasinDTO;
+import ca.datamagic.hurricane.dto.StormKeyDTO;
 import ca.datamagic.hurricane.dto.StormTrackDTO;
 import ca.datamagic.hurricane.dto.YearDTO;
 
@@ -149,7 +150,6 @@ public class Importer {
 		try {
 			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/META-INF/log4j.importer.cfg.xml");
 			String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/data/hurdat2-nepac-1949-2017-050418.txt";
-			int importYear = 2017;
 			
 			BasinDAO basinDAO = new BasinDAO();
 			
@@ -166,9 +166,6 @@ public class Importer {
 					}
 					List<YearDTO> years = basin.getYears();
 					for (YearDTO year : years) {
-						if (year.getYear().intValue() != importYear) {
-							continue;
-						}
 						try {
 							yearDAO.save(year);
 						} catch (Throwable t) {
@@ -179,6 +176,16 @@ public class Importer {
 						stormTrackDAO.setBasin(basin.getName());
 						stormTrackDAO.setYear(year.getYear());
 						for (StormTrackDTO stormTrack : year.getTracks()) {
+							StormKeyDTO stormKey = new StormKeyDTO();
+							stormKey.setStormKey(basin.getName(), year.getYear(), stormTrack.getStormName());
+							stormKey.setBasin(basin.getName());
+							stormKey.setYear(year.getYear());
+							stormKey.setStormName(stormTrack.getStormName());
+							try {
+								basinDAO.save(stormKey);
+							} catch (Throwable t) {
+								_logger.warn("Exception", t);
+							}
 							try {
 								stormTrackDAO.save(stormTrack);
 							} catch (Throwable t) {

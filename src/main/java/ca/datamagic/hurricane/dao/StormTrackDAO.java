@@ -98,7 +98,6 @@ public class StormTrackDAO extends BaseDAO {
 		}
 	}
 	
-	@MemoryCache
 	public List<StormTrackDTO> getStormTracks(Integer stormNo) throws Exception {
 		Connection connection = null;
 		PreparedStatement statement = null;

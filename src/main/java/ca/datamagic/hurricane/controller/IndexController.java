@@ -34,6 +34,7 @@ import ca.datamagic.hurricane.dao.YearDAO;
 import ca.datamagic.hurricane.dto.BasinDTO;
 import ca.datamagic.hurricane.dto.CachedItemDTO;
 import ca.datamagic.hurricane.dto.StormDTO;
+import ca.datamagic.hurricane.dto.StormKeyDTO;
 import ca.datamagic.hurricane.dto.StormTrackDTO;
 import ca.datamagic.hurricane.dto.SwaggerConfigurationDTO;
 import ca.datamagic.hurricane.dto.SwaggerResourceDTO;
@@ -126,6 +127,18 @@ public class IndexController {
 			throw new Exception(t);
 		}
 	}
+	
+	@RequestMapping(value="/api/search/{searchText}", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+    public List<StormKeyDTO> search(Model model, HttpServletRequest request, HttpServletResponse response, @PathVariable String searchText) throws Exception {		
+		try {
+			_logger.debug("search");
+			return _basinDAO.search(searchText);
+		} catch (Throwable t) {
+			_logger.error("Exception", t);
+			throw new Exception(t);
+		}
+    }
 	
 	@RequestMapping(value="/api/storm/{basin}/{year}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
