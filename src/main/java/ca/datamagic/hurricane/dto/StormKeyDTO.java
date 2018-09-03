@@ -15,6 +15,7 @@ public class StormKeyDTO implements Serializable {
 	private String _stormKey = null;
 	private String _basin = null;
 	private Integer _year = null;
+	private Integer _stormNo = null;
 	private String _stormName = null;
 	
 	public String getStormKey() {
@@ -25,8 +26,8 @@ public class StormKeyDTO implements Serializable {
 		_stormKey = newVal;
 	}
 	
-	public void setStormKey(String basin, Integer year, String stormName) {
-		setStormKey(MessageFormat.format("{0}-{1}-{2}", basin, Integer.toString(year.intValue()), stormName));
+	public void setStormKey(String basin, Integer year, Integer stormNo) {
+		setStormKey(MessageFormat.format("{0}-{1}-{2}", basin, Integer.toString(year.intValue()), Integer.toString(stormNo.intValue())));
 	}
 	
 	public String getBasin() {
@@ -43,6 +44,14 @@ public class StormKeyDTO implements Serializable {
 	
 	public void setYear(Integer newVal) {
 		_year = newVal;
+	}
+	
+	public Integer getStormNo() {
+		return _stormNo;
+	}
+	
+	public void setStormNo(Integer newVal) {
+		_stormNo = newVal;
 	}
 	
 	public String getStormName() {

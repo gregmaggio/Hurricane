@@ -149,7 +149,7 @@ public class Importer {
 	public static void main(String[] args) {
 		try {
 			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/META-INF/log4j.importer.cfg.xml");
-			String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/data/hurdat2-nepac-1949-2017-050418.txt";
+			String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/data/hurdat2-1851-2017-050118.txt";
 			
 			BasinDAO basinDAO = new BasinDAO();
 			
@@ -160,14 +160,14 @@ public class Importer {
 				BasinDTO basinLookup = Basins.getBasin(basin.getName());
 				if (basinLookup != null) {
 					try {
-						basinDAO.save(basinLookup);
+						//basinDAO.save(basinLookup);
 					} catch (Throwable t) {
 						_logger.warn("Exception", t);
 					}
 					List<YearDTO> years = basin.getYears();
 					for (YearDTO year : years) {
 						try {
-							yearDAO.save(year);
+							//yearDAO.save(year);
 						} catch (Throwable t) {
 							_logger.warn("Exception", t);
 						}
@@ -177,9 +177,10 @@ public class Importer {
 						stormTrackDAO.setYear(year.getYear());
 						for (StormTrackDTO stormTrack : year.getTracks()) {
 							StormKeyDTO stormKey = new StormKeyDTO();
-							stormKey.setStormKey(basin.getName(), year.getYear(), stormTrack.getStormName());
+							stormKey.setStormKey(basin.getName(), year.getYear(), stormTrack.getStormNo());
 							stormKey.setBasin(basin.getName());
 							stormKey.setYear(year.getYear());
+							stormKey.setStormNo(stormTrack.getStormNo());
 							stormKey.setStormName(stormTrack.getStormName());
 							try {
 								basinDAO.save(stormKey);
@@ -187,7 +188,7 @@ public class Importer {
 								_logger.warn("Exception", t);
 							}
 							try {
-								stormTrackDAO.save(stormTrack);
+								//stormTrackDAO.save(stormTrack);
 							} catch (Throwable t) {
 								_logger.warn("Exception", t);
 							}

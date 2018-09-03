@@ -84,6 +84,7 @@ public class BasinDAO extends BaseDAO {
 				dto.setStormKey(resultSet.getString("storm_key"));
 				dto.setBasin(resultSet.getString("basin"));
 				dto.setYear(resultSet.getInt("year"));
+				dto.setStormNo(resultSet.getInt("storm_no"));
 				dto.setStormName(resultSet.getString("storm_name"));
 				storms.add(dto);
 			}
@@ -152,11 +153,12 @@ public class BasinDAO extends BaseDAO {
 		PreparedStatement statement = null;
 		try {
 			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("INSERT INTO storm (storm_key, basin, year, storm_name) VALUES (?, ?, ?, ?)");
+			statement = connection.prepareStatement("INSERT INTO storm (storm_key, basin, year, storm_no, storm_name) VALUES (?, ?, ?, ?, ?)");
 			statement.setString(1, stormKey.getStormKey());
 			statement.setString(2, stormKey.getBasin());
 			statement.setInt(3, stormKey.getYear());
-			statement.setString(4, stormKey.getStormName());
+			statement.setInt(4, stormKey.getStormNo());
+			statement.setString(5, stormKey.getStormName());
 			int affectedRecords = statement.executeUpdate();
 			_logger.debug("affectedRecords: " + affectedRecords);
 		} finally {

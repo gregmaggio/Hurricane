@@ -322,6 +322,10 @@
 					"type" : "number",
 					"format" : "integer"
 				},
+				"stormNo" : {
+					"type" : "number",
+					"format" : "integer"
+				},
 				"stormName" : {
 					"type" : "string"
 				}
