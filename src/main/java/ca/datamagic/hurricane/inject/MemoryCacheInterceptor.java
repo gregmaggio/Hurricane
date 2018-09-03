@@ -11,6 +11,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import ca.datamagic.hurricane.dao.StormTrackDAO;
+
 /**
  * @author Greg
  *
@@ -33,6 +35,16 @@ public class MemoryCacheInterceptor implements MethodInterceptor {
 	private static String getKey(MethodInvocation invocation) {
 		StringBuffer key = new StringBuffer();
 		key.append(invocation.getThis().getClass().getName());
+		try {
+			StormTrackDAO stormTrackDAO = (StormTrackDAO)invocation.getThis();
+			key.append("(");
+			key.append(stormTrackDAO.getBasin().toUpperCase());
+			key.append(",");
+			key.append(Integer.toString(stormTrackDAO.getYear().intValue()));
+			key.append(")");
+		} catch (Throwable t) {
+			// Ignore
+		}
 		key.append(".");
 		key.append(invocation.getMethod().getName());
 		key.append("(");
