@@ -7,80 +7,76 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author Greg
  *
  */
 public class BasinDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String _name = null;
-	private String _description = null;
-	private Double _centerX = null;
-	private Double _centerY = null;
-	private Integer _zoom = null;
-	private transient List<YearDTO> _years = new ArrayList<YearDTO>();
+	private String name = null;
+	private String description = null;
+	private Double centerX = null;
+	private Double centerY = null;
+	private Integer zoom = null;
+	private transient List<YearDTO> years = new ArrayList<YearDTO>();
 	
 	public BasinDTO() {
 		
 	}
 	
 	public BasinDTO(String name, String description, double centerX, double centerY, int zoom) {
-		_name = name;
-		_description = description;
-		_centerX = new Double(centerX);
-		_centerY = new Double(centerY);
-		_zoom = new Integer(zoom);
+		this.name = name;
+		this.description = description;
+		this.centerX = new Double(centerX);
+		this.centerY = new Double(centerY);
+		this.zoom = new Integer(zoom);
 	}
 
 	public String getName() {
-		return _name;
+		return this.name;
 	}
 	
 	public void setName(String newVal) {
-		_name = newVal;
+		this.name = newVal;
 	}
 	
 	public String getDescription() {
-		return _description;
+		return this.description;
 	}
 	
 	public void setDescription(String newVal) {
-		_description = newVal;
+		this.description = newVal;
 	}
 	
 	public Double getCenterX() {
-		return _centerX;
+		return this.centerX;
 	}
 	
 	public void setCenterX(Double newVal) {
-		_centerX = newVal;
+		this.centerX = newVal;
 	}
 	
 	public Double getCenterY() {
-		return _centerY;
+		return this.centerY;
 	}
 	
 	public void setCenterY(Double newVal) {
-		_centerY = newVal;
+		this.centerY = newVal;
 	}
 	
 	public Integer getZoom() {
-		return _zoom;
+		return this.zoom;
 	}
 	
 	public void setZoom(Integer newVal) {
-		_zoom = newVal;
+		this.zoom = newVal;
 	}
 	
-	@JsonIgnore
 	public List<YearDTO> getYears() {
-		return _years;
+		return this.years;
 	}
 	
-	@JsonIgnore
 	public void setYears(List<YearDTO> newVal) {
-		_years = newVal;
+		this.years = newVal;
 	}
 }

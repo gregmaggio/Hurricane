@@ -12,18 +12,18 @@ import java.text.MessageFormat;
  */
 public class StormKeyDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String _stormKey = null;
-	private String _basin = null;
-	private Integer _year = null;
-	private Integer _stormNo = null;
-	private String _stormName = null;
+	private String stormKey = null;
+	private String basin = null;
+	private Integer year = null;
+	private Integer stormNo = null;
+	private String stormName = null;
 	
 	public String getStormKey() {
-		return _stormKey;
+		return this.stormKey;
 	}
 	
 	public void setStormKey(String newVal) {
-		_stormKey = newVal;
+		this.stormKey = newVal;
 	}
 	
 	public void setStormKey(String basin, Integer year, Integer stormNo) {
@@ -31,34 +31,34 @@ public class StormKeyDTO implements Serializable {
 	}
 	
 	public String getBasin() {
-		return _basin;
+		return this.basin;
 	}
 	
 	public void setBasin(String newVal) {
-		_basin = newVal;
+		this.basin = newVal;
 	}
 	
 	public Integer getYear() {
-		return _year;
+		return this.year;
 	}
 	
 	public void setYear(Integer newVal) {
-		_year = newVal;
+		this.year = newVal;
 	}
 	
 	public Integer getStormNo() {
-		return _stormNo;
+		return this.stormNo;
 	}
 	
 	public void setStormNo(Integer newVal) {
-		_stormNo = newVal;
+		this.stormNo = newVal;
 	}
 	
 	public String getStormName() {
-		return _stormName;
+		return this.stormName;
 	}
 	
 	public void setStormName(String newVal) {
-		_stormName = newVal;
+		this.stormName = newVal;
 	}
 }

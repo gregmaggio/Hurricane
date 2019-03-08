@@ -13,35 +13,35 @@ import java.util.List;
  */
 public class YearDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String _basin = null;
-	private Integer _year = null;
-	private List<StormTrackDTO> _tracks = new ArrayList<StormTrackDTO>();
+	private String basin = null;
+	private Integer year = null;
+	private List<StormTrackDTO> tracks = new ArrayList<StormTrackDTO>();
 	
 	public YearDTO() {
 		
 	}
 	
 	public String getBasin() {
-		return _basin;
+		return this.basin;
 	}
 	
 	public void setBasin(String newVal) {
-		_basin = newVal;
+		this.basin = newVal;
 	}
 	
 	public Integer getYear() {
-		return _year;
+		return this.year;
 	}	
 	
 	public void setYear(Integer newVal) {
-		_year = newVal;
+		this.year = newVal;
 	}
 	
 	public List<StormTrackDTO> getTracks() {
-		return _tracks;
+		return this.tracks;
 	}
 	
 	public void setTracks(List<StormTrackDTO> newVal) {
-		_tracks = newVal;
+		this.tracks = newVal;
 	}
 }

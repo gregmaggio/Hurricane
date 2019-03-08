@@ -8,25 +8,25 @@ package ca.datamagic.hurricane.dto;
  *
  */
 public class CachedItemDTO {
-	private String _key = null;
-	private String _json = null;
+	private String key = null;
+	private String json = null;
 	
 	public CachedItemDTO() {
 	}
 
 	public String getKey() {
-		return _key;
+		return this.key;
 	}
 	
 	public String getJson() {
-		return _json;
+		return this.json;
 	}
 	
 	public void setKey(String newVal) {
-		_key = newVal;
+		this.key = newVal;
 	}
 	
 	public void setJson(String newVal) {
-		_json = newVal;
+		this.json = newVal;
 	}
 }

@@ -8,7 +8,7 @@
 			"name" : "Apache License Version 2.0"
 		}
 	},
-	"host" : "localhost:8080",
+	"host" : "{{host}}",
 	"basePath" : "/Hurricane",
 	"tags" : [{
 			"name" : "hurricane-controller",
@@ -162,7 +162,7 @@
 				}
 			}
 		},
-		"/api/storm/{basin}/{year}/{stormNo}" : {
+		"/api/stormTrack/{basin}/{year}/{stormNo}" : {
 			"get" : {
 				"tags" : ["hurricane-controller"],
 				"summary" : "stormTracksByStormNo",
@@ -211,7 +211,7 @@
 				}
 			}
 		},
-		"/api/storm/{basin}/{startYear}/{startMonth}/{startDay}/{endYear}/{endMonth}/{endDay}" : {
+		"/api/stormTrack/{basin}/{startYear}/{startMonth}/{startDay}/{endYear}/{endMonth}/{endDay}" : {
 			"get" : {
 				"tags" : ["hurricane-controller"],
 				"summary" : "stormTracksByStormNo",
@@ -313,10 +313,10 @@
 			"type" : "object",
 			"properties" : {
 				"stormKey" : {
-					"type" : "string",
+					"type" : "string"
 				},
 				"basin" : {
-					"type" : "string",					
+					"type" : "string"				
 				},
 				"year" : {
 					"type" : "number",

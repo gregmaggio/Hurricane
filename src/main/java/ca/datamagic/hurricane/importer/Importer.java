@@ -17,7 +17,6 @@ import org.apache.log4j.xml.DOMConfigurator;
 
 import ca.datamagic.hurricane.dao.BasinDAO;
 import ca.datamagic.hurricane.dao.StormTrackDAO;
-import ca.datamagic.hurricane.dao.YearDAO;
 import ca.datamagic.hurricane.dto.BasinDTO;
 import ca.datamagic.hurricane.dto.StormKeyDTO;
 import ca.datamagic.hurricane.dto.StormTrackDTO;
@@ -148,12 +147,10 @@ public class Importer {
 	
 	public static void main(String[] args) {
 		try {
-			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/META-INF/log4j.importer.cfg.xml");
+			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/log4j.importer.cfg.xml");
 			String fileName = "C:/Dev/Applications/Hurricane/src/main/resources/data/hurdat2-1851-2017-050118.txt";
 			
 			BasinDAO basinDAO = new BasinDAO();
-			
-			YearDAO yearDAO = new YearDAO();
 			
 			List<BasinDTO> basins = parse(fileName);
 			for (BasinDTO basin : basins) {

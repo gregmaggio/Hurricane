@@ -11,31 +11,31 @@ import java.io.Serializable;
  */
 public class StormDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Integer _stormNo = null;
-	private String _stormName = null;
-	private Integer _tracks = null;
+	private Integer stormNo = null;
+	private String stormName = null;
+	private Integer tracks = null;
 	
 	public Integer getStormNo() {
-		return _stormNo;
+		return this.stormNo;
 	}
 	
 	public void setStormNo(Integer newVal) {
-		_stormNo = newVal;
+		this.stormNo = newVal;
 	}
 	
 	public String getStormName() {
-		return _stormName;
+		return this.stormName;
 	}
 	
 	public void setStormName(String newVal) {
-		_stormName = newVal;
+		this.stormName = newVal;
 	}
 
 	public Integer getTracks() {
-		return _tracks;
+		return this.tracks;
 	}
 	
 	public void setTracks(Integer newVal) {
-		_tracks = newVal;
+		this.tracks = newVal;
 	}
 }
