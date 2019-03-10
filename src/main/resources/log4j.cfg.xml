@@ -10,18 +10,8 @@
 			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
 		</layout>
 	</appender>
-	<NoSql name="databaseAppender">
-		<MongoDb databaseName="local" collectionName="exception" server="localhost" />
-		<filters>
-		    <MarkerFilter marker="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-		</filters>
-	</NoSql>
-	<logger name="org.springframework">
-    	<level value="warn"/>
-	</logger>
 	<root> 
 		<priority value ="debug" /> 
 		<appender-ref ref="rollingFile" />
-		<appender-ref ref="databaseAppender" />
 	</root>
 </log4j:configuration>
