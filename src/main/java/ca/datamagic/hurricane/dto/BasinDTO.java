@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 /**
  * @author Greg
  *
@@ -78,5 +80,10 @@ public class BasinDTO implements Serializable {
 	
 	public void setYears(List<YearDTO> newVal) {
 		this.years = newVal;
+	}
+	
+	@Override
+	public String toString() {
+		return (new Gson()).toJson(this);
 	}
 }

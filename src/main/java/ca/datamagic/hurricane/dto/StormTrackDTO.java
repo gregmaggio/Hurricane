@@ -5,6 +5,8 @@ package ca.datamagic.hurricane.dto;
 
 import java.io.Serializable;
 
+import com.google.gson.Gson;
+
 /**
  * @author Greg
  *
@@ -176,5 +178,10 @@ public class StormTrackDTO implements Serializable {
 	
 	public void setY(Double newVal) {
 		this.y = newVal;
+	}
+	
+	@Override
+	public String toString() {
+		return (new Gson()).toJson(this);
 	}
 }

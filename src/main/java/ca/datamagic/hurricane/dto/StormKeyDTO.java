@@ -6,6 +6,8 @@ package ca.datamagic.hurricane.dto;
 import java.io.Serializable;
 import java.text.MessageFormat;
 
+import com.google.gson.Gson;
+
 /**
  * @author Greg
  *
@@ -60,5 +62,10 @@ public class StormKeyDTO implements Serializable {
 	
 	public void setStormName(String newVal) {
 		this.stormName = newVal;
+	}
+	
+	@Override
+	public String toString() {
+		return (new Gson()).toJson(this);
 	}
 }

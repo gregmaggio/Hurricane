@@ -78,6 +78,7 @@ public class YearDAO extends BaseDAO {
 	}
 	
 	public void save(YearDTO year) throws Exception {
+		_logger.debug("save: " + year);
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -88,6 +89,33 @@ public class YearDAO extends BaseDAO {
 			int affectedRecords = statement.executeUpdate();
 			_logger.debug("affectedRecords: " + affectedRecords);
 		} finally {
+			if (statement != null) {
+				close(statement);
+			}
+			if (connection != null) {
+				close(connection);
+			}
+		}
+	}
+	
+	public boolean exists(YearDTO year) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = DriverManager.getConnection(_connnectionString);
+			statement = connection.prepareStatement("SELECT COUNT(*) FROM year WHERE basin = ? AND year = ?");
+			statement.setString(1, year.getBasin());
+			statement.setInt(2, year.getYear());
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return (resultSet.getFloat(1) > 0) ? true : false;
+			}
+			return false;
+		} finally {
+			if (resultSet != null) {
+				close(resultSet);
+			}
 			if (statement != null) {
 				close(statement);
 			}

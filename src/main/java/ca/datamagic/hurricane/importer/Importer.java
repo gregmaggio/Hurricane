@@ -149,47 +149,40 @@ public class Importer {
 	public static void main(String[] args) {
 		try {
 			DOMConfigurator.configure("C:/Dev/Applications/Hurricane/src/main/resources/log4j.importer.cfg.xml");
-			String fileName = "C:\\Data\\HurricaneTracks\\hurdat2-2018.txt";
+			String fileName = "C:\\Data\\HurricaneTracks\\hurdat2-nepac-1949-2019-042320.txt";
 			
-			BasinDAO basinDAO = new BasinDAO();
-			
+			BasinDAO basinDAO = new BasinDAO();	
 			List<BasinDTO> basins = parse(fileName);
 			for (BasinDTO basin : basins) {
+				_logger.debug("basin: " + basin);
 				BasinDTO basinLookup = Basins.getBasin(basin.getName());
-				if (basinLookup != null) {
-					try {
-						//basinDAO.save(basinLookup);
-					} catch (Throwable t) {
-						_logger.warn("Exception", t);
+				if (basinLookup != null) {					
+					if (!basinDAO.exists(basinLookup)) {
+						basinDAO.save(basinLookup);
 					}
 					List<YearDTO> years = basin.getYears();
 					for (YearDTO year : years) {
-						try {
-							YearDAO yearDAO = new YearDAO();
+						_logger.debug("year: " + year);
+						YearDAO yearDAO = new YearDAO();
+						if (!yearDAO.exists(year)) {
 							yearDAO.save(year);
-						} catch (Throwable t) {
-							_logger.warn("Exception", t);
 						}
-						
 						StormTrackDAO stormTrackDAO = new StormTrackDAO();
 						stormTrackDAO.setBasin(basin.getName());
 						stormTrackDAO.setYear(year.getYear());
 						for (StormTrackDTO stormTrack : year.getTracks()) {
+							_logger.debug("stormTrack: " + stormTrack);
 							StormKeyDTO stormKey = new StormKeyDTO();
 							stormKey.setStormKey(basin.getName(), year.getYear(), stormTrack.getStormNo());
 							stormKey.setBasin(basin.getName());
 							stormKey.setYear(year.getYear());
 							stormKey.setStormNo(stormTrack.getStormNo());
 							stormKey.setStormName(stormTrack.getStormName());
-							try {
-								basinDAO.save(stormKey);
-							} catch (Throwable t) {
-								_logger.warn("Exception", t);
+							if (!basinDAO.exists(stormKey)) {
+								basinDAO.save(stormKey);								
 							}
-							try {
+							if (!stormTrackDAO.exists(stormTrack)) {
 								stormTrackDAO.save(stormTrack);
-							} catch (Throwable t) {
-								_logger.warn("Exception", t);
 							}
 						}
 					}

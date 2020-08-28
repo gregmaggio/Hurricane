@@ -326,6 +326,7 @@ public class StormTrackDAO extends BaseDAO {
 	}
 	
 	public void save(StormTrackDTO stormTrack) throws Exception {
+		_logger.debug("save: " + stormTrack);
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -353,6 +354,34 @@ public class StormTrackDAO extends BaseDAO {
 			int affectedRecords = statement.executeUpdate();
 			_logger.debug("affectedRecords: " + affectedRecords);
 		} finally {
+			if (statement != null) {
+				close(statement);
+			}
+			if (connection != null) {
+				close(connection);
+			}
+		}
+	}
+	
+	public boolean exists(StormTrackDTO stormTrack) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			String connectionString = getConnectionString();
+			connection = DriverManager.getConnection(connectionString);
+			statement = connection.prepareStatement("SELECT COUNT(*) FROM stormtrack WHERE storm_no = ? AND track_no = ?");
+			statement.setInt(1, stormTrack.getStormNo());
+			statement.setInt(2, stormTrack.getTrackNo());
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return (resultSet.getFloat(1) > 0) ? true : false;
+			}
+			return false;
+		} finally {
+			if (resultSet != null) {
+				close(resultSet);
+			}
 			if (statement != null) {
 				close(statement);
 			}

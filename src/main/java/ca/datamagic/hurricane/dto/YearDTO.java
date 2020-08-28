@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 /**
  * @author Greg
  *
@@ -43,5 +45,10 @@ public class YearDTO implements Serializable {
 	
 	public void setTracks(List<StormTrackDTO> newVal) {
 		this.tracks = newVal;
+	}
+	
+	@Override
+	public String toString() {
+		return (new Gson()).toJson(this);
 	}
 }

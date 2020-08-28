@@ -3,6 +3,8 @@
  */
 package ca.datamagic.hurricane.dto;
 
+import com.google.gson.Gson;
+
 /**
  * @author Greg
  *
@@ -28,5 +30,10 @@ public class CachedItemDTO {
 	
 	public void setJson(String newVal) {
 		this.json = newVal;
+	}
+	
+	@Override
+	public String toString() {
+		return (new Gson()).toJson(this);
 	}
 }

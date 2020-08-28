@@ -126,6 +126,7 @@ public class BasinDAO extends BaseDAO {
 	}
 	
 	public void save(BasinDTO basin) throws Exception {
+		_logger.debug("save: " + basin);
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -148,7 +149,34 @@ public class BasinDAO extends BaseDAO {
 		}
 	}
 	
+	public boolean exists(BasinDTO basin) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = DriverManager.getConnection(_connnectionString);
+			statement = connection.prepareStatement("SELECT COUNT(*) FROM basin WHERE name = ?");
+			statement.setString(1, basin.getName());
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return (resultSet.getFloat(1) > 0) ? true : false;
+			}
+			return false;
+		} finally {
+			if (resultSet != null) {
+				close(resultSet);
+			}
+			if (statement != null) {
+				close(statement);
+			}
+			if (connection != null) {
+				close(connection);
+			}
+		}
+	}
+	
 	public void save(StormKeyDTO stormKey) throws Exception {
+		_logger.debug("save: " + stormKey);
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -162,6 +190,32 @@ public class BasinDAO extends BaseDAO {
 			int affectedRecords = statement.executeUpdate();
 			_logger.debug("affectedRecords: " + affectedRecords);
 		} finally {
+			if (statement != null) {
+				close(statement);
+			}
+			if (connection != null) {
+				close(connection);
+			}
+		}
+	}
+	
+	public boolean exists(StormKeyDTO stormKey) throws Exception {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = DriverManager.getConnection(_connnectionString);
+			statement = connection.prepareStatement("SELECT COUNT(*) FROM storm WHERE storm_key = ?");
+			statement.setString(1, stormKey.getStormKey());
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return (resultSet.getFloat(1) > 0) ? true : false;
+			}
+			return false;
+		} finally {
+			if (resultSet != null) {
+				close(resultSet);
+			}
 			if (statement != null) {
 				close(statement);
 			}
