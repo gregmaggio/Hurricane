@@ -16,6 +16,7 @@ public class DAOModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Performance.class), new PerformanceInterceptor());
 		bindInterceptor(Matchers.any(), Matchers.annotatedWith(MemoryCache.class), new MemoryCacheInterceptor());
 	}
 }

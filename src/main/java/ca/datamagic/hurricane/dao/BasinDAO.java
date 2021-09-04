@@ -3,225 +3,52 @@
  */
 package ca.datamagic.hurricane.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import com.google.cloud.bigquery.FieldValueList;
+import com.google.cloud.bigquery.TableResult;
 
 import ca.datamagic.hurricane.dto.BasinDTO;
-import ca.datamagic.hurricane.dto.StormKeyDTO;
 import ca.datamagic.hurricane.inject.MemoryCache;
+import ca.datamagic.hurricane.inject.Performance;
 
 /**
  * @author Greg
  *
  */
 public class BasinDAO extends BaseDAO {
-	private static Logger _logger = LogManager.getLogger(BaseDAO.class);
-	private String _database = null;
-	private String _connnectionString = null;
+	public static List<BasinDTO> basins = null;
 	
-	public BasinDAO() {
-		_database = MessageFormat.format("{0}/basins.db", getDataPath());
-		_connnectionString = MessageFormat.format("jdbc:sqlite:{0}", _database);
+	static {
+		basins = new ArrayList<BasinDTO>();
+		basins.add(new BasinDTO("NA", "North Atlantic",27.042943892507832,-64.06562896264852));
+		basins.add(new BasinDTO("EP", "Eastern North Pacific",17.34682960352381,-101.40464744010902));
+		basins.add(new BasinDTO("WP", "Western North Pacific",20.393590910059267,133.57668140439355));
+		basins.add(new BasinDTO("NI", "North Indian",17.770978228587104,81.49652796447191));
+		basins.add(new BasinDTO("SI", "South Indian",-17.595758564542496,76.92105309952329));
+		basins.add(new BasinDTO("SP", "Southern Pacific",-19.537684973260493,123.76518808351108));
+		basins.add(new BasinDTO("SA", "South Atlantic",-25.933099999999992,-41.72111596638654));
 	}
 	
-	@MemoryCache
+	@Performance
 	public List<BasinDTO> getBasins() throws Exception {
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
-		try {
-			List<BasinDTO> basins = new ArrayList<BasinDTO>();
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM basin");
-			while (resultSet.next()) {
-				BasinDTO dto = new BasinDTO();
-				dto.setName(resultSet.getString("name"));
-				dto.setDescription(resultSet.getString("description"));
-				dto.setCenterX(resultSet.getDouble("centerX"));
-				dto.setCenterY(resultSet.getDouble("centerY"));
-				dto.setZoom(resultSet.getInt("zoom"));
-				basins.add(dto);
-			}
-			return basins;
-		} finally {
-			if (resultSet != null) {
-				close(resultSet);
-			}
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
+		return basins;
 	}
 	
-	public List<StormKeyDTO> search(String searchText) throws Exception {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			List<StormKeyDTO> storms = new ArrayList<StormKeyDTO>();
-			if (!searchText.endsWith("%")) {
-				searchText += "%";
-			}
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("SELECT * FROM storm WHERE storm_name LIKE ? ORDER BY storm_name");
-			statement.setString(1, searchText);
-			resultSet = statement.executeQuery();			
-			while (resultSet.next()) {
-				StormKeyDTO dto = new StormKeyDTO();
-				dto.setStormKey(resultSet.getString("storm_key"));
-				dto.setBasin(resultSet.getString("basin"));
-				dto.setYear(resultSet.getInt("year"));
-				dto.setStormNo(resultSet.getInt("storm_no"));
-				dto.setStormName(resultSet.getString("storm_name"));
-				storms.add(dto);
-			}
-			return storms;
-		} finally {
-			if (resultSet != null) {
-				close(resultSet);
-			}
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
-	
-	public void clear() throws Exception {
-		Connection connection = null;
-		Statement statement = null;
-		try {
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.createStatement();
-			statement.executeUpdate("DELETE FROM basin");
-			
-			close(statement);
-			statement = null;
-			
-			statement = connection.createStatement();
-			statement.executeUpdate("DELETE FROM storm");
-		} finally {
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
-	
-	public void save(BasinDTO basin) throws Exception {
-		_logger.debug("save: " + basin);
-		Connection connection = null;
-		PreparedStatement statement = null;
-		try {
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("INSERT INTO basin (name, description, centerX, centerY, zoom) VALUES (?, ?, ?, ?, ?)");
-			statement.setString(1, basin.getName());
-			statement.setString(2, basin.getDescription());
-			statement.setDouble(3, basin.getCenterX());
-			statement.setDouble(4, basin.getCenterY());
-			statement.setDouble(5, basin.getZoom());
-			int affectedRecords = statement.executeUpdate();
-			_logger.debug("affectedRecords: " + affectedRecords);
-		} finally {
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
-	
-	public boolean exists(BasinDTO basin) throws Exception {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("SELECT COUNT(*) FROM basin WHERE name = ?");
-			statement.setString(1, basin.getName());
-			resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				return (resultSet.getFloat(1) > 0) ? true : false;
-			}
-			return false;
-		} finally {
-			if (resultSet != null) {
-				close(resultSet);
-			}
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
-	
-	public void save(StormKeyDTO stormKey) throws Exception {
-		_logger.debug("save: " + stormKey);
-		Connection connection = null;
-		PreparedStatement statement = null;
-		try {
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("INSERT INTO storm (storm_key, basin, year, storm_no, storm_name) VALUES (?, ?, ?, ?, ?)");
-			statement.setString(1, stormKey.getStormKey());
-			statement.setString(2, stormKey.getBasin());
-			statement.setInt(3, stormKey.getYear());
-			statement.setInt(4, stormKey.getStormNo());
-			statement.setString(5, stormKey.getStormName());
-			int affectedRecords = statement.executeUpdate();
-			_logger.debug("affectedRecords: " + affectedRecords);
-		} finally {
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
-	
-	public boolean exists(StormKeyDTO stormKey) throws Exception {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			connection = DriverManager.getConnection(_connnectionString);
-			statement = connection.prepareStatement("SELECT COUNT(*) FROM storm WHERE storm_key = ?");
-			statement.setString(1, stormKey.getStormKey());
-			resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				return (resultSet.getFloat(1) > 0) ? true : false;
-			}
-			return false;
-		} finally {
-			if (resultSet != null) {
-				close(resultSet);
-			}
-			if (statement != null) {
-				close(statement);
-			}
-			if (connection != null) {
-				close(connection);
-			}
-		}
-	}
+	@Performance
+	@MemoryCache
+	public List<Integer> getYears(String basin) throws IOException, InterruptedException {
+        List<Integer> years = new ArrayList<Integer>();
+        if ((basin != null) && (basin.length() > 0)) {
+            String query = MessageFormat.format("SELECT DISTINCT season FROM `bigquery-public-data.noaa_hurricanes.hurricanes` WHERE basin = {0} ORDER BY season", "'" + basin + "'");
+            TableResult result = runQuery(query);
+            for (FieldValueList row : result.iterateAll()) {
+                years.add(new Integer(row.get("season").getStringValue()));
+            }
+        }
+        return years;
+    }
 }

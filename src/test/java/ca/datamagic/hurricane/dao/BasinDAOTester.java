@@ -2,43 +2,28 @@ package ca.datamagic.hurricane.dao;
 
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import ca.datamagic.hurricane.dto.StormKeyDTO;
+import ca.datamagic.hurricane.dto.BasinDTO;
+import ca.datamagic.hurricane.testing.BaseTester;
 
-public class BasinDAOTester {
-	private static Logger _logger = LogManager.getLogger(BasinDAOTester.class);
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		DOMConfigurator.configure("src/test/resources/META-INF/log4j.cfg.xml");
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
+public class BasinDAOTester extends BaseTester {
+	private static Logger logger = LogManager.getLogger(BasinDAOTester.class);
 
 	@Test
-	public void testSearch() throws Exception {
+	public void testBasins() throws Exception {
 		BasinDAO dao = new BasinDAO();
-		List<StormKeyDTO> storms = dao.search("KA");
-		for (int ii = 0; ii < storms.size(); ii++) {
-			_logger.debug(storms.get(ii).getStormName());
+		List<BasinDTO> basins = dao.getBasins();
+		for (int ii = 0; ii < basins.size(); ii++) {
+			logger.debug(basins.get(ii).getName());
+		}
+		BasinDTO basin = basins.get(0);
+		List<Integer> years = dao.getYears(basin.getName());
+		logger.debug("years for " + basin.getName());
+		for (int ii = 0; ii < years.size(); ii++) {
+			logger.debug(years.get(ii));
 		}
 	}
 

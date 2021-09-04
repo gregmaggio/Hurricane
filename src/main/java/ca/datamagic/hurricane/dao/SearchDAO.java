@@ -1,0 +1,37 @@
+/**
+ * 
+ */
+package ca.datamagic.hurricane.dao;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.cloud.bigquery.FieldValueList;
+import com.google.cloud.bigquery.TableResult;
+
+import ca.datamagic.hurricane.dto.StormKeyDTO;
+import ca.datamagic.hurricane.inject.Performance;
+
+/**
+ * @author Greg
+ *
+ */
+public class SearchDAO extends BaseDAO {
+	@Performance
+	public List<StormKeyDTO> search(String searchText) throws IOException, InterruptedException {
+        List<StormKeyDTO> stormKeys = new ArrayList<StormKeyDTO>();
+        String query = MessageFormat.format("SELECT DISTINCT basin, season, number, name FROM `bigquery-public-data.noaa_hurricanes.hurricanes` WHERE name like {0} ORDER BY basin, season, number, name LIMIT 55", "'" + searchText.trim().toUpperCase() + "%'");
+        TableResult result = runQuery(query);
+        for (FieldValueList row : result.iterateAll()) {
+            String basin = row.get("basin").getStringValue();
+            Integer year = Integer.parseInt(row.get("season").getStringValue());
+            Integer stormNo = (int)row.get("number").getLongValue();
+            String stormName = row.get("name").getStringValue();
+            String stormKey = MessageFormat.format("{0}-{1}-{2}", basin, Integer.toString(year), stormNo);
+            stormKeys.add(new StormKeyDTO(stormKey, basin, year, stormNo, stormName));
+        }
+        return stormKeys;
+    }
+}

@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -37,7 +37,7 @@ public class SearchServlet extends HttpServlet {
 			Matcher searchMatcher = searchPattern.matcher(pathInfo);
 			if (searchMatcher.find()) {
 				String searchText = searchMatcher.group("searchText");
-				List<StormKeyDTO> stormKeys = HurricaneContextListener.getBasinDAO().search(searchText);
+				List<StormKeyDTO> stormKeys = HurricaneContextListener.getSearchDAO().search(searchText);
 				String json = (new Gson()).toJson(stormKeys);
 				response.setContentType("application/json");
 				response.getWriter().println(json);

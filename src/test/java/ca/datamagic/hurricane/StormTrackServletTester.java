@@ -13,7 +13,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,14 +27,6 @@ import ca.datamagic.hurricane.servlet.StormTrackServlet;
  *
  */
 public class StormTrackServletTester {
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		DOMConfigurator.configure("src/test/resources/META-INF/log4j.cfg.xml");
-	}
 
 	/**
 	 * @throws java.lang.Exception

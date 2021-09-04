@@ -3,72 +3,51 @@
  */
 package ca.datamagic.hurricane.dao;
 
-import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import ca.datamagic.hurricane.dto.BasinDTO;
+import ca.datamagic.hurricane.dto.StormDTO;
 import ca.datamagic.hurricane.dto.StormTrackDTO;
-import ca.datamagic.hurricane.dto.YearDTO;
-import ca.datamagic.hurricane.importer.Importer;
 import ca.datamagic.hurricane.inject.DAOModule;
+import ca.datamagic.hurricane.testing.BaseTester;
 
 /**
  * @author Greg
  *
  */
-public class CacheTester {
-	private static Logger _logger = LogManager.getLogger(CacheTester.class);
-	private StormTrackDAO _dao = null;
-	
-	public CacheTester() {
-	}
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		DOMConfigurator.configure("src/test/resources/META-INF/log4j.cfg.xml");
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		String dataPath = (new File("src/test/resources/META-INF/data")).getCanonicalPath();
-		BaseDAO.setDataPath(dataPath);
-		
-		List<BasinDTO> testBasins = Importer.parse("src/test/resources/KatrinaTest.txt");
-		BasinDTO testBasin = testBasins.get(0);
-		YearDTO testYear = testBasin.getYears().get(0);
-		
+public class CacheTester extends BaseTester {
+	@Test
+	public void testBasins() throws Exception {
 		Injector injector = Guice.createInjector(new DAOModule());
-		_dao = injector.getInstance(StormTrackDAO.class);
-		_dao.setBasin(testBasin.getName());
-		_dao.setYear(testYear.getYear());
-		_dao.clear();
-		for (StormTrackDTO stormTrack : testYear.getTracks()) {
-			_dao.save(stormTrack);
-		}
+		BasinDAO dao = injector.getInstance(BasinDAO.class);
+		List<BasinDTO> basins = dao.getBasins();
+		BasinDTO basin = basins.get(0);
+		List<Integer> years1 = dao.getYears(basin.getName());
+		List<Integer> years2 = dao.getYears(basin.getName());
+		Assert.assertEquals(years1.size(), years2.size());
 	}
 	
 	@Test
-	public void test1() throws Exception {
-		long startTimeMillis = System.currentTimeMillis();
-		_dao.getStormTracks(1);
-		long endTimeMillis = System.currentTimeMillis();
-		double runningTime = (endTimeMillis - startTimeMillis) / 1000;
-		_logger.debug("firstRun: " + runningTime);
-		
-		startTimeMillis = System.currentTimeMillis();
-		_dao.getStormTracks(1);
-		endTimeMillis = System.currentTimeMillis();
-		runningTime = (endTimeMillis - startTimeMillis) / 1000;
-		_logger.debug("secondRun: " + runningTime);
+	public void testStorms() throws Exception {
+		Injector injector = Guice.createInjector(new DAOModule());
+		StormDAO dao = injector.getInstance(StormDAO.class);
+		List<StormDTO> storms1 = dao.storms("NA", 2021);
+		List<StormDTO> storms2 = dao.storms("NA", 2021);
+		Assert.assertEquals(storms1.size(), storms2.size());
+	}
+	
+	@Test
+	public void testStormTracks() throws Exception {
+		Injector injector = Guice.createInjector(new DAOModule());
+		StormTrackDAO dao = injector.getInstance(StormTrackDAO.class);
+		List<StormTrackDTO> tracks1 = dao.tracks("NA", 2021, 60);
+		List<StormTrackDTO> tracks2 = dao.tracks("NA", 2021, 60);
+		Assert.assertEquals(tracks1.size(), tracks2.size());
 	}
 }

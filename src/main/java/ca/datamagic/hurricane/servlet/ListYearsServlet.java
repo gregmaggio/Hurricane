@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -35,7 +35,7 @@ public class ListYearsServlet extends HttpServlet {
 			Matcher listYearsMatcher = listYearsPattern.matcher(pathInfo);
 			if (listYearsMatcher.find()) {
 				String basin = listYearsMatcher.group("basin");
-				List<Integer> years = HurricaneContextListener.getYearDAO().getYears(basin);
+				List<Integer> years = HurricaneContextListener.getBasinDAO().getYears(basin);
 				String json = (new Gson()).toJson(years);
 				response.setContentType("application/json");
 				response.getWriter().println(json);

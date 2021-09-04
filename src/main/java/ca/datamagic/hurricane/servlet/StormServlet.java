@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -39,7 +39,7 @@ public class StormServlet extends HttpServlet {
 				String basin = stormMatcher.group("basin");
 				String year = stormMatcher.group("year");
 				Integer intYear = Integer.parseInt(year);
-				List<StormDTO> storms = HurricaneContextListener.getStormTrackDAO(basin, intYear).getStorms();
+				List<StormDTO> storms = HurricaneContextListener.getStormDAO().storms(basin, intYear);
 				String json = (new Gson()).toJson(storms);
 				response.setContentType("application/json");
 				response.getWriter().println(json);
